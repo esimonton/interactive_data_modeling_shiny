@@ -1,0 +1,25 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1626363404209.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "CC3A71D7",
+    "lastKnownWriteTime" : 1626369533,
+    "last_content_update" : 1626369533441,
+    "path" : "~/regrex_example/app.R",
+    "project_path" : null,
+    "properties" : {
+        "cursorPosition" : "18,14",
+        "scrollLine" : "1"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
