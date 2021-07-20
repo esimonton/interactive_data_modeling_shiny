@@ -64,8 +64,13 @@ ui <- fluidPage(
         mainPanel(
             plotOutput("distPlot"),
             plotOutput("lmPlot"),
+            # Add values for the lmdata outputs
+            h5("R-squared Values"),
+            textOutput("rsquared"),
+            textOutput("intercept"),
+            textOutput("slope"),
+            textOutput("pvalue"),
             plotOutput("lmdata"),
-            #plotOutput("linPlot"),
             tableOutput("contents")
         )
     )
@@ -85,7 +90,7 @@ server <- function(input, output) {
     })
     
     # Make reactive button to show linear modeling plotline 
-    lmdata <- eventReactive(input$go, {
+    lmplot <- eventReactive(input$go, {
         lm(y ~ x, data = dataInput())
     })
     
@@ -106,29 +111,39 @@ server <- function(input, output) {
     # Create output and plot for linear model based on scatter plot data
     output$lmPlot <- renderPlot({
         plot(x = dataInput()$x, y = dataInput()$y, main = "Linear Model")
-        abline(lmdata(), col = "aquamarine3", lwd = 4)
+        abline(lmplot(), col = "aquamarine3", lwd = 4)
     })
     
     # Need to create outputs for slope, intercept, and correlation coefficient from lm
     output$lmdata <- renderPlot({
-        fit1 <- lm(dataInput()$y ~ dataInput()$x, data = dataInput())   
-        ggplot(fit1$model, aes_string(x = names(fit1$model)[2], y = names(fit1$model)[1])) + 
+        ggplot(lmplot()$model, aes_string(x = names(lmplot()$model)[2], y = names(lmplot()$model)[1])) + 
             geom_point() +
             stat_smooth(method = "lm", col = "blue") +
+            ggtitle("Linear Regression Data Labeled") +
+            theme(plot.title = element_text(hjust = 0.5, face = "bold")) +
             geom_label(aes(x = 0, y = 7.5), hjust = 0, 
-                       label = paste("Adj R2 = ",signif(summary(fit1)$adj.r.squared, 5),
-                                     "\nIntercept =",signif(fit1$coef[[1]],5 ),
-                                     " \nSlope =",signif(fit1$coef[[2]], 5),
-                                     " \nP =",signif(summary(fit1)$coef[2,4], 5)))
+                       label = paste("Adj R2 = ",signif(summary(lmplot())$adj.r.squared, 5),
+                                     "\nIntercept =",signif(lmplot()$coef[[1]],5 ),
+                                     " \nSlope =",signif(lmplot()$coef[[2]], 5),
+                                     " \nP =",signif(summary(lmplot())$coef[2,4], 5)))
     })
     
-    # Didn't use this output plot, but it formed the basis for successful command code above
-    # output$linPlot <- renderPlot({
-    #     plot(y = dataInput()$y, x = dataInput()$x, main = "Regrex1 Linear Model")
-    #     abline(lm(y ~ x, data = dataInput()), col = "blue", lwd = 4)
-    # })
+    # Add the lmdata values as labels to the top of the lmdata graph
+    output$rsquared <- renderText({
+        print(paste("Adj R2 = ",signif(summary(lmplot())$adj.r.squared, 5)))
+    })
     
-    #})
+    output$intercept <- renderText({
+        print(paste("Intercept =",signif(lmplot()$coef[[1]],5)))
+    })
+    
+    output$slope <- renderText({
+        print(paste("Slope =",signif(lmplot()$coef[[2]], 5)))
+    })
+    
+    output$pvalue <- renderText({
+        print(paste("P =",signif(summary(lmplot())$coef[2,4], 5)))
+    })
     
     output$contents <- renderTable({
         

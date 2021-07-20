@@ -5,15 +5,15 @@
     "dirty" : false,
     "encoding" : "UTF-8",
     "folds" : "",
-    "hash" : "2662641673",
+    "hash" : "0",
     "id" : "F644D48A",
-    "lastKnownWriteTime" : 1626792724,
-    "last_content_update" : 1626792724723,
+    "lastKnownWriteTime" : 1626799098,
+    "last_content_update" : 1626799098789,
     "path" : "~/shiny_lmdata_final/app.R",
     "project_path" : null,
     "properties" : {
-        "cursorPosition" : "147,4",
-        "scrollLine" : "80"
+        "cursorPosition" : "127,86",
+        "scrollLine" : "114"
     },
     "read_only" : false,
     "read_only_alternatives" : [
