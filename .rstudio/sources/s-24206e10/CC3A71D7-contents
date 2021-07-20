@@ -17,6 +17,7 @@
 #
 
 library(shiny)
+library(ggplot2)
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(
@@ -72,6 +73,7 @@ ui <- fluidPage(
         mainPanel(
             plotOutput("distPlot"),
             plotOutput("lmPlot"),
+            plotOutput("lmdata"),
             #plotOutput("linPlot"),
             tableOutput("contents")
         )
@@ -117,6 +119,17 @@ server <- function(input, output) {
     })
     
     # Need to create outputs for slope, intercept, and correlation coefficient from lm
+    output$lmdata <- renderPlot({
+        fit1 <- lm(dataInput()$y ~ dataInput()$x, data = dataInput())   
+        ggplot(fit1$model, aes_string(x = names(fit1$model)[2], y = names(fit1$model)[1])) + 
+            geom_point() +
+            stat_smooth(method = "lm", col = "blue") +
+            geom_label(aes(x = 0, y = 7.5), hjust = 0, 
+                       label = paste("Adj R2 = ",signif(summary(fit1)$adj.r.squared, 5),
+                                     "\nIntercept =",signif(fit1$coef[[1]],5 ),
+                                     " \nSlope =",signif(fit1$coef[[2]], 5),
+                                     " \nP =",signif(summary(fit1)$coef[2,4], 5)))
+    })
     
     # Didn't use this output plot, but it formed the basis for successful command code above
     # output$linPlot <- renderPlot({
